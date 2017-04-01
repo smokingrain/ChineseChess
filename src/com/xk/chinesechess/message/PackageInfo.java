@@ -1,52 +1,81 @@
 package com.xk.chinesechess.message;
 
+import com.xk.chinesechess.utils.JSONUtil;
+
+
 public class PackageInfo {
-	private Long to;
+	private String to;
 	private String msg;
-	private Long from;
+	private String from;
 	private String type;
 	private String app;
+	private int version = 0;
 
 	public PackageInfo() {
 	}
-	
-	public PackageInfo(Long to, String msg, Long from,String type,String app) {
-		super();
+
+	public PackageInfo(String to, String msg, String from, String type,
+			String app, int version) {
 		this.to = to;
 		this.msg = msg;
 		this.from = from;
 		this.type = type;
-		this.setApp(app);
+		this.app = app;
+		this.setVersion(version);
 	}
-	public Long getTo() {
-		return to;
+
+	public String getTo() {
+		return this.to;
 	}
-	public void setTo(Long to) {
+
+	public void setTo(String to) {
 		this.to = to;
 	}
+
 	public String getMsg() {
-		return msg;
+		return this.msg;
 	}
+
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
-	public Long getFrom() {
-		return from;
+
+	public String getFrom() {
+		return this.from;
 	}
-	public void setFrom(Long from) {
+
+	public void setFrom(String from) {
 		this.from = from;
 	}
+
 	public String getType() {
-		return type;
+		return this.type;
 	}
+
 	public void setType(String type) {
 		this.type = type;
 	}
+
 	public String getApp() {
-		return app;
+		return this.app;
 	}
+
 	public void setApp(String app) {
 		this.app = app;
 	}
+
+	@Override
+	public String toString() {
+		return JSONUtil.toJosn(this);
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+	
 	
 }

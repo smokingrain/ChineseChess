@@ -1015,9 +1015,9 @@ public class Position {
 
 	public static final int MAX_BOOK_SIZE = 16384;
 	public static int bookSize = 0;
-	public static int[] bookLock = new int[MAX_BOOK_SIZE];
-	public static short[] bookMove = new short[MAX_BOOK_SIZE];
-	public static short[] bookValue = new short[MAX_BOOK_SIZE];
+//	public static final int[] bookLock = new int[MAX_BOOK_SIZE];
+//	public static final short[] bookMove = new short[MAX_BOOK_SIZE];
+//	public static final short[] bookValue = new short[MAX_BOOK_SIZE];
 
 	public static void init() {
 		InputStream in = Gdx.files.internal("data/book/BOOK.DAT").read();

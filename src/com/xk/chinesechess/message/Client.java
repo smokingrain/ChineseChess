@@ -1,7 +1,7 @@
 package com.xk.chinesechess.message;
 
 public class Client {
-	private Long cid=-1L;//玩家id
+	private String cid = null;//玩家id
 	private String cname="asdfsd";//玩家名
 	private String roomid="sdf";//所在房间id
 	private Integer computer=2;//电脑对战局数
@@ -11,10 +11,10 @@ public class Client {
 	
 	public Client() {
 	}
-	public Long getCid() {
+	public String getCid() {
 		return cid;
 	}
-	public void setCid(Long cid) {
+	public void setCid(String cid) {
 		this.cid = cid;
 	}
 	public String getCname() {

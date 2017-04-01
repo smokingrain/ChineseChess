@@ -66,7 +66,7 @@ public class ChineseChess extends Game {
 			PackageInfo info=new PackageInfo();
 			info.setApp(Constant.APP);
 			info.setType(Constant.MSG_EXIT_ROOM);
-			info.setTo(Constant.SERVER);
+			info.setTo(roomid);
 			info.setFrom(Constant.me.getCid());
 			info.setMsg(JSONUtil.toJosn(Constant.me));
 			Constant.mSender.writeMessage(JSONUtil.toJosn(info));
