@@ -42,9 +42,10 @@ public class Constant {
 	public static final String MSG_CROOM="croom";
 	public static final String MSG_ROOMS="rooms";
 	public static final String MSG_LOGIN="login";
+	public static final String MSG_ACTION="action";
 	public static final String MSG_JOIN="join";
-	public static final String MSG_JOIN_RESULT="joinResult";
-	public static final String MSG_XIAQI="xiaqi";
+//	public static final String MSG_JOIN_RESULT="joinResult";
+	public static final String MSG_XIAQI="move";
 	public static final String MSG_WIN="win";
 	public static final String MSG_PING="ping";
 	public static final String MSG_REGRET="regret";

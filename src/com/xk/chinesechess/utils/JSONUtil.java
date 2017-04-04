@@ -16,6 +16,18 @@ public class JSONUtil {
 
 	private static ObjectMapper  mapper=new ObjectMapper();
 	
+	/**
+	 * 
+	 * 用途：获取集合类型
+	 * @date 2016年9月29日
+	 * @param collectionClass
+	 * @param elementClasses
+	 * @return
+	 */
+	public static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {   
+		return mapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);   
+    } 
+	
 	public static JavaType getType(Class clazz){
 		JavaType javaType = mapper.getTypeFactory().constructParametricType(List.class, clazz); 
 		return javaType;

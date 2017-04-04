@@ -52,9 +52,9 @@ public class Qipan extends Image {
 							pi.setMsg(JSONUtil.toJosn(new Xiaqi(srcX,srcY,x, y)));
 							Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
 						}else{
-							stage.computerMove();
+//							stage.computerMove();
 						}
-						stage.decideFailer();
+//						stage.decideFailer();
 					}else{
 //						Constant.sounds.get("illegal").play();
 					}

@@ -1,10 +1,14 @@
 package com.xk.chinesechess.message;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Rooms {
-	private Client creater;//创建者
+	private String creator;//创建者
 	private String name;
+	private Integer type = 1;
 	private String id;
-	private Client client;//加入者
+	private List<String> members = new ArrayList<String>();//加入者
 	private String createTime;
 	
 	public Rooms(){
@@ -27,7 +31,7 @@ public class Rooms {
 	
 	@Override
 	public String toString() {
-		return this.getName()+"    创建者:"+this.getCreater();
+		return this.getName()+"    创建者:"+this.creator;
 	}
 
 	
@@ -39,7 +43,7 @@ public class Rooms {
 		for(Rooms room:list){
 			sb.append(room.getName());
 			sb.append("创建者:");
-			sb.append(room.getCreater().getCname());
+			sb.append(room.creator);
 		}
 		return sb.toString();
 	}
@@ -53,20 +57,28 @@ public class Rooms {
 		this.createTime = createTime;
 	}
 
-	public Client getClient() {
-		return client;
+	public List<String> getMembers() {
+		return members;
 	}
 
-	public void setClient(Client client) {
-		this.client = client;
+	public void setMembers(List<String> members) {
+		this.members = members;
 	}
 
-	public Client getCreater() {
-		return creater;
+	public String getCreator() {
+		return creator;
 	}
 
-	public void setCreater(Client creater) {
-		this.creater = creater;
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 }

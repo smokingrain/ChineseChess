@@ -34,16 +34,16 @@ import com.xk.chinesechess.zujian.Qizi;
 public class GameWStage extends Stage implements MainStage{
 	
 	//AI
-	private Map<Character,String> nameMap=new HashMap<Character,String>();
+//	private Map<Character,String> nameMap=new HashMap<Character,String>();
 	private PieceArray pieceArr;
 	private boolean computerIsThingking=false;
-	private Position pos = new Position();
-	private Search search = new Search(pos, 12);
+//	private Position pos = new Position();
+//	private Search search = new Search(pos, 12);
 	private Qizi[] pieceIndex;
 	private PieceArray capturedArr;
 	private Qizi lastSelected;
-	private int sqSelected;
-	private int mvLast;
+//	private int sqSelected;
+//	private int mvLast;
 	private int level=0;
 	
 	
@@ -102,7 +102,6 @@ public class GameWStage extends Stage implements MainStage{
 		p1Ready=true;
 		p2Ready=true;
 		myTurn=isMyPlace;
-		sqSelected = mvLast = 0;
 		start();
 	}
 	
@@ -117,14 +116,14 @@ public class GameWStage extends Stage implements MainStage{
 		pieceArr = new PieceArray();
 		pieceIndex = new Qizi[90];;// [90]
 		capturedArr = new PieceArray();
-		initActiveBoard();
+//		initActiveBoard();
 		lastSelected=null;
-		initPieces();
+//		initPieces();
 	}
 	
-	private void initPieces() {
+	public void initPieces(String s) {
 		QiziSelection listener=new QiziSelection();
-		String s = pos.toFen();
+//		String s = pos.toFen();
 		System.out.println("fenstr:"+s);
 		Qizi tmpQizi;
 		int row = 9;//
@@ -158,10 +157,10 @@ public class GameWStage extends Stage implements MainStage{
 		}
 	}
 	
-	public void initActiveBoard() {
-		pos.fromFen(Position.STARTUP_FEN[0]);
-		pos.changeSide();
-	}
+//	public void initActiveBoard() {
+//		pos.fromFen(Position.STARTUP_FEN[0]);
+//		pos.changeSide();
+//	}
 	
 	public void loadBook() {
 		
@@ -272,20 +271,20 @@ public class GameWStage extends Stage implements MainStage{
 		destBox.setSize(54, 54);
 		destBox.setVisible(false);
 		addActor(destBox);
-		nameMap.put('K', "皇");
-		nameMap.put('R', "车");
-		nameMap.put('C', "炮");
-		nameMap.put('N', "马");
-		nameMap.put('P', "兵");
-		nameMap.put('A', "仕");
-		nameMap.put('B', "相");
-		nameMap.put('k', "将");
-		nameMap.put('r', "车");
-		nameMap.put('c', "炮");
-		nameMap.put('n', "马");
-		nameMap.put('p', "卒");
-		nameMap.put('a', "士");
-		nameMap.put('b', "象");
+//		nameMap.put('K', "皇");
+//		nameMap.put('R', "车");
+//		nameMap.put('C', "炮");
+//		nameMap.put('N', "马");
+//		nameMap.put('P', "兵");
+//		nameMap.put('A', "仕");
+//		nameMap.put('B', "相");
+//		nameMap.put('k', "将");
+//		nameMap.put('r', "车");
+//		nameMap.put('c', "炮");
+//		nameMap.put('n', "马");
+//		nameMap.put('p', "卒");
+//		nameMap.put('a', "士");
+//		nameMap.put('b', "象");
 		
 	}
 	
@@ -324,9 +323,9 @@ public class GameWStage extends Stage implements MainStage{
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
-				if(!isMyTurn()||!isrunning){
-					return super.touchDown(event, x, y, pointer, button);
-				}
+//				if(!isMyTurn()||!isrunning){
+//					return super.touchDown(event, x, y, pointer, button);
+//				}
 				if(!isLocal){
 					PackageInfo pi=new PackageInfo();
 					pi.setApp(Constant.APP);
@@ -336,8 +335,8 @@ public class GameWStage extends Stage implements MainStage{
 					pi.setMsg("对方悔棋");
 					Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
 				}
-				undo();
-				undo();
+//				undo();
+//				undo();
 				return super.touchDown(event, x, y, pointer, button);
 			}
 		});
@@ -348,30 +347,30 @@ public class GameWStage extends Stage implements MainStage{
 				p1Ready=true;
 				System.out.println("ready!!!");
 				if(!isrunning){
-					if(!isLocal){
-						if(null!=Constant.enamy){
-							PackageInfo info=new PackageInfo();
-							info.setApp(Constant.APP);
-							info.setFrom(Constant.me.getCid());
-							info.setTo(Constant.enamy.getCid());
-							info.setType(Constant.MSG_READY);
-							info.setMsg("");
-							Constant.mSender.writeMessage(JSONUtil.toJosn(info));
-						}else{
-							Constant.mSender.showInfo("请等待玩家加入...");
-							return super.touchDown(event, x, y, pointer, button);
+					if(null!=Constant.enamy){
+						PackageInfo info=new PackageInfo();
+						info.setApp(Constant.APP);
+						info.setFrom(Constant.me.getCid());
+						info.setTo(Constant.enamy.getCid());
+						info.setType(Constant.MSG_ACTION);
+						Map<String, Object> cmd = new HashMap<String, Object>();
+						cmd.put("cmd", Constant.MSG_READY);
+						info.setMsg(JSONUtil.toJosn(cmd));
+						Constant.mSender.writeMessage(JSONUtil.toJosn(info));
+					}else{
+						Constant.mSender.showInfo("请等待玩家加入...");
+						return super.touchDown(event, x, y, pointer, button);
+					}
+				}
+				Constant.mSender.showInfo("准备好了");
+				rebuild(GameWStage.this.isMyPlace,GameWStage.this.isLocal);
+				if(p2Ready||isLocal){
+					Gdx.app.postRunnable(new Runnable() {
+						public void run() {
+							gameReady();
 						}
-					}
-					Constant.mSender.showInfo("准备好了");
-					rebuild(GameWStage.this.isMyPlace,GameWStage.this.isLocal);
-					if(p2Ready||isLocal){
-						Gdx.app.postRunnable(new Runnable() {
-							public void run() {
-								gameReady();
-							}
-						});
-						
-					}
+					});
+					
 				}
 				return super.touchDown(event, x, y, pointer, button);
 			}
@@ -471,9 +470,9 @@ public class GameWStage extends Stage implements MainStage{
 	public void setP2Ready() {
 		Constant.mSender.showInfo("对方准备完毕");
 		this.p2Ready = true;
-		if(p1Ready){
-			gameReady();
-		}
+//		if(p1Ready){
+//			gameReady();
+//		}
 	}
 
 	public void destroy(){
@@ -490,7 +489,7 @@ public class GameWStage extends Stage implements MainStage{
 	private void selectQz(Qizi qz) {
 		int x1 = (int) qz.getCoordinateX();
 		int y1 = (int) qz.getCoordinateY();
-		sqSelected=Position.COORD_XY(x1 + Position.FILE_LEFT, y1 + Position.RANK_TOP);
+		Position.COORD_XY(x1 + Position.FILE_LEFT, y1 + Position.RANK_TOP);
 		lastSelected=qz;
 		destBox.setVisible(true);
 		destBox.setPosition(qz.getX(), qz.getY());
@@ -505,12 +504,12 @@ public class GameWStage extends Stage implements MainStage{
 	 * @return
 	 */
 	public boolean xiaqi(int x1,int y1,int x2,int y2){
-		int src=x1*10+y1;
+		int src=x1 * 10 + y1;
 		Qizi qizi=pieceIndex[src];
 		if (moveQizi(qizi, x2, y2)) {
 			changeLocation(qizi, x2, y2);
 			setMyTurn(true);
-			decideFailer();
+//			decideFailer();
 			return true;
 		}
 		return false;
@@ -520,48 +519,45 @@ public class GameWStage extends Stage implements MainStage{
 		if (qz == null){
 			return false;
 		}
-		int srcX = (int) qz.getCoordinateX(), srcY = (int) qz.getCoordinateY();
-		int sqSrc=Position.COORD_XY(srcX + Position.FILE_LEFT, srcY + Position.RANK_TOP);
-		int sqDst = Position.COORD_XY(dstX + Position.FILE_LEFT, dstY + Position.RANK_TOP);
-		int mv=Position.MOVE(sqSrc, sqDst);
-		if (pos.legalMove(mv)) {
-			if (pos.makeMove(mv)) {
-				if (pos.captured()) {
-					pos.setIrrev();
-				}
-				sqSelected = 0;
-				mvLast = mv;
-				return true;
-			}
-		}
-		return false;
+//		int srcX = (int) qz.getCoordinateX(), srcY = (int) qz.getCoordinateY();
+//		int sqSrc=Position.COORD_XY(srcX + Position.FILE_LEFT, srcY + Position.RANK_TOP);
+//		int sqDst = Position.COORD_XY(dstX + Position.FILE_LEFT, dstY + Position.RANK_TOP);
+//		int mv=Position.MOVE(sqSrc, sqDst);
+//		if (pos.legalMove(mv)) {
+//			if (pos.makeMove(mv)) {
+//				if (pos.captured()) {
+//					pos.setIrrev();
+//				}
+//				return true;
+//			}
+//		}
+		return true;
 	}
 	
-	public boolean undo() {
-		if(pos.mvList.size()<1){
-			return false;
-		}
-		int mv=pos.mvList.get(pos.mvList.size()-1);
-		if(mv<=0){
-			return false;
-		}
-		int srcx=Position.FILE_X(Position.SRC(mv))-Position.FILE_LEFT;
-		int srcy=Position.RANK_Y(Position.SRC(mv))-Position.RANK_TOP;
-		int dstx=Position.FILE_X(Position.DST(mv))-Position.FILE_LEFT;
-		int dsty=Position.RANK_Y(Position.DST(mv))-Position.RANK_TOP;
-		int src=srcx*10+srcy;
-		int dst=dstx*10+dsty;
+	public boolean undo(int src, int dst, boolean chk) {
+//		if(pos.mvList.size()<1){
+//			return false;
+//		}
+//		int mv=pos.mvList.get(pos.mvList.size()-1);
+//		if(mv<=0){
+//			return false;
+//		}
+//		int srcx=Position.FILE_X(Position.SRC(mv))-Position.FILE_LEFT;
+//		int srcy=Position.RANK_Y(Position.SRC(mv))-Position.RANK_TOP;
+//		int dstx=Position.FILE_X(Position.DST(mv))-Position.FILE_LEFT;
+//		int dsty=Position.RANK_Y(Position.DST(mv))-Position.RANK_TOP;
+//		int src=srcx*10+srcy;
+//		int dst=dstx*10+dsty;
 		if (src < 0 || dst < 0) {
 			return false;
 		}
 		lastSelected=pieceIndex[dst];
 		selectQz(getLastSelected());
 		changeLocation(getLastSelected(), src / 10, src % 10);
-		if (pos.chkList.get(pos.chkList.size()-1)) {
+		if (chk) {
 			pieceIndex[dst] = capturedArr.remove(capturedArr.size() - 1);
 			pieceIndex[dst].setVisible(true);
 		}
-		pos.undoMakeMove();
 		return true;
 	}
 	
@@ -613,46 +609,46 @@ public class GameWStage extends Stage implements MainStage{
 		System.out.println("下棋不成功！");
 	}
 	
-	public void decideFailer() {// send lose message
-		if(pos.inCheck()){
-			Constant.mSender.showInfo("将军");
-		}
-		
-		if(pos.isMate()&&isMyPlace){
-			if (isMyTurn()){
-				gameEnd(false);
-				Constant.mSender.showInfo("你输了！");
-				sendResult(-1);
-			}else{
-				gameEnd(true);
-				Constant.mSender.showInfo("你赢了！");
-				sendResult(1);
-				
-			}
-			return;
-		}
-		
-		int vlRep = pos.repStatus(3);
-		if (vlRep > 0) {
-			vlRep = (!isMyTurn() ? pos.repValue(vlRep) : -pos.repValue(vlRep));
-			int rst = (vlRep > Position.WIN_VALUE ? -1 :
-				vlRep < -Position.WIN_VALUE ? 1 : 0);
-			String message = (vlRep > Position.WIN_VALUE ? "长打作负，请不要气馁！" :
-					vlRep < -Position.WIN_VALUE ? "电脑长打作负，祝贺你取得胜利！" : "双方不变作和，辛苦了！");
-			gameEnd(rst>0);
-			Constant.mSender.showInfo(message);
-			sendResult(rst);
-			return;
-		}
-		if (pos.mvList.size() > 100) {
-			String message = "超过自然限着作和，辛苦了！";
-			gameEnd(false);
-			Constant.mSender.showInfo(message);
-			sendResult(0);
-			return;
-		}
-		
-	}
+//	public void decideFailer() {// send lose message
+//		if(pos.inCheck()){
+//			Constant.mSender.showInfo("将军");
+//		}
+//		
+//		if(pos.isMate()&&isMyPlace){
+//			if (isMyTurn()){
+//				gameEnd(false);
+//				Constant.mSender.showInfo("你输了！");
+//				sendResult(-1);
+//			}else{
+//				gameEnd(true);
+//				Constant.mSender.showInfo("你赢了！");
+//				sendResult(1);
+//				
+//			}
+//			return;
+//		}
+//		
+//		int vlRep = pos.repStatus(3);
+//		if (vlRep > 0) {
+//			vlRep = (!isMyTurn() ? pos.repValue(vlRep) : -pos.repValue(vlRep));
+//			int rst = (vlRep > Position.WIN_VALUE ? -1 :
+//				vlRep < -Position.WIN_VALUE ? 1 : 0);
+//			String message = (vlRep > Position.WIN_VALUE ? "长打作负，请不要气馁！" :
+//					vlRep < -Position.WIN_VALUE ? "电脑长打作负，祝贺你取得胜利！" : "双方不变作和，辛苦了！");
+//			gameEnd(rst>0);
+//			Constant.mSender.showInfo(message);
+//			sendResult(rst);
+//			return;
+//		}
+//		if (pos.mvList.size() > 100) {
+//			String message = "超过自然限着作和，辛苦了！";
+//			gameEnd(false);
+//			Constant.mSender.showInfo(message);
+//			sendResult(0);
+//			return;
+//		}
+//		
+//	}
 	
 	private void sendResult(int rst){
 		if(!isLocal()){
@@ -666,42 +662,42 @@ public class GameWStage extends Stage implements MainStage{
 		}
 	}
 	
-	public void computerMove(){
-		Thread t=new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				System.out.println("电脑下棋");
-				computerIsThingking = true;
-				long cur=System.currentTimeMillis();
-				mvLast=search.searchMain(1000 << (level << 1));
-				System.out.println("cost time "+((System.currentTimeMillis()-cur)));
-				int srcx=Position.FILE_X(Position.SRC(mvLast))-Position.FILE_LEFT;
-				int srcy=Position.RANK_Y(Position.SRC(mvLast))-Position.RANK_TOP;
-				int dstx=Position.FILE_X(Position.DST(mvLast))-Position.FILE_LEFT;
-				int dsty=Position.RANK_Y(Position.DST(mvLast))-Position.RANK_TOP;
-				final int src=srcx*10+srcy;
-				final int dst=dstx*10+dsty;
-				Gdx.app.postRunnable(new Runnable() {
-					
-					@Override
-					public void run() {
-						
-						moveQizi(src, dst);
-						setMyTurn(true);
-						decideFailer();
-						computerIsThingking = false;
-					}
-				});
-				
-				
-			}
-		});
-		t.setDaemon(true);
-		t.setPriority(Thread.MAX_PRIORITY);
-		t.start();
-		
-	}
+//	public void computerMove(){
+//		Thread t=new Thread(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				System.out.println("电脑下棋");
+//				computerIsThingking = true;
+//				long cur=System.currentTimeMillis();
+//				int mvLast=search.searchMain(1000 << (level << 1));
+//				System.out.println("cost time "+((System.currentTimeMillis()-cur)));
+//				int srcx=Position.FILE_X(Position.SRC(mvLast))-Position.FILE_LEFT;
+//				int srcy=Position.RANK_Y(Position.SRC(mvLast))-Position.RANK_TOP;
+//				int dstx=Position.FILE_X(Position.DST(mvLast))-Position.FILE_LEFT;
+//				int dsty=Position.RANK_Y(Position.DST(mvLast))-Position.RANK_TOP;
+//				final int src=srcx*10+srcy;
+//				final int dst=dstx*10+dsty;
+//				Gdx.app.postRunnable(new Runnable() {
+//					
+//					@Override
+//					public void run() {
+//						
+//						moveQizi(src, dst);
+//						setMyTurn(true);
+////						decideFailer();
+//						computerIsThingking = false;
+//					}
+//				});
+//				
+//				
+//			}
+//		});
+//		t.setDaemon(true);
+//		t.setPriority(Thread.MAX_PRIORITY);
+//		t.start();
+//		
+//	}
 	
 	public Qizi getLastSelected() {
 		return lastSelected;
@@ -772,38 +768,26 @@ public class GameWStage extends Stage implements MainStage{
 			box.setVisible(false);
 			Qizi tmpQizi=(Qizi) event.getTarget();
 			if(null==getLastSelected()){
-				mvLast=0;
 				selectQz(tmpQizi);
 			}else{
 				int x1 = (int) tmpQizi.getCoordinateX();
 				int y1 = (int) tmpQizi.getCoordinateY();
 				int srcX=(int) getLastSelected().getCoordinateX();
 				int srcY=(int) getLastSelected().getCoordinateY();
-				System.out.println(x1+"  "+y1);
-				if (moveQizi(getLastSelected(), x1, y1)) {
-					System.out.println("自己下棋");
-					changeLocation(getLastSelected(), x1, y1);
-					setMyTurn(false);
-					if(!isLocal()){
-						
-						PackageInfo pi=new PackageInfo();
-						pi.setApp(Constant.APP);
-						pi.setFrom(Constant.me.getCid());
-						pi.setType(Constant.MSG_XIAQI);
-						pi.setTo(Constant.enamy.getCid());
-						pi.setMsg(JSONUtil.toJosn(new Xiaqi(srcX,srcY,x1, y1)));
-						Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
-						decideFailer();
-					}else{
-						decideFailer();
-						computerMove();
-					}
-					
-				} else {
-					System.out.println("不能下棋");
-					mvLast=0;
-					selectQz(tmpQizi);
-				}
+				int src = srcX * 10 + srcY;
+				int dest = x1 * 10 + y1;
+				Map<String, Object> cmd = new HashMap<String, Object>();
+				cmd.put("cmd", Constant.MSG_XIAQI);
+				cmd.put("src", src);
+				cmd.put("dest", dest);
+				PackageInfo pi=new PackageInfo();
+				pi.setApp(Constant.APP);
+				pi.setFrom(Constant.me.getCid());
+				pi.setType(Constant.MSG_ACTION);
+				pi.setTo(Constant.enamy.getCid());
+				pi.setMsg(JSONUtil.toJosn(cmd));
+				Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
+				System.out.println(src + "  " + dest);
 			}
 			return super.touchDown(event, x, y, pointer, button);
 		}
