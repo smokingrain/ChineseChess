@@ -1,5 +1,8 @@
 package com.xk.chinesechess.stage.ui;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -44,13 +47,20 @@ public class Qipan extends Image {
 						stage.changeLocation(stage.getLastSelected(), x, y);
 						stage.setMyTurn(false);
 						if(!stage.isLocal()){
+							int src = srcX * 10 + srcY;
+							int dest = x * 10 + y;
+							Map<String, Object> cmd = new HashMap<String, Object>();
+							cmd.put("cmd", Constant.MSG_XIAQI);
+							cmd.put("src", src);
+							cmd.put("dest", dest);
 							PackageInfo pi=new PackageInfo();
 							pi.setApp(Constant.APP);
 							pi.setFrom(Constant.me.getCid());
-							pi.setType(Constant.MSG_XIAQI);
-							pi.setTo(Constant.enamy.getCid());
-							pi.setMsg(JSONUtil.toJosn(new Xiaqi(srcX,srcY,x, y)));
+							pi.setType(Constant.MSG_ACTION);
+							pi.setTo(Constant.enamy.getRoomid());
+							pi.setMsg(JSONUtil.toJosn(cmd));
 							Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
+							System.out.println(src + "  " + dest);
 						}else{
 //							stage.computerMove();
 						}

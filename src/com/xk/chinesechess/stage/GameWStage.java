@@ -331,7 +331,7 @@ public class GameWStage extends Stage implements MainStage{
 					pi.setApp(Constant.APP);
 					pi.setFrom(Constant.me.getCid());
 					pi.setType(Constant.MSG_REGRET);
-					pi.setTo(Constant.enamy.getCid());
+					pi.setTo(Constant.enamy.getRoomid());
 					pi.setMsg("对方悔棋");
 					Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
 				}
@@ -351,7 +351,7 @@ public class GameWStage extends Stage implements MainStage{
 						PackageInfo info=new PackageInfo();
 						info.setApp(Constant.APP);
 						info.setFrom(Constant.me.getCid());
-						info.setTo(Constant.enamy.getCid());
+						info.setTo(Constant.enamy.getRoomid());
 						info.setType(Constant.MSG_ACTION);
 						Map<String, Object> cmd = new HashMap<String, Object>();
 						cmd.put("cmd", Constant.MSG_READY);
@@ -364,14 +364,6 @@ public class GameWStage extends Stage implements MainStage{
 				}
 				Constant.mSender.showInfo("准备好了");
 				rebuild(GameWStage.this.isMyPlace,GameWStage.this.isLocal);
-				if(p2Ready||isLocal){
-					Gdx.app.postRunnable(new Runnable() {
-						public void run() {
-							gameReady();
-						}
-					});
-					
-				}
 				return super.touchDown(event, x, y, pointer, button);
 			}
 		});
@@ -388,7 +380,7 @@ public class GameWStage extends Stage implements MainStage{
 							pi.setApp(Constant.APP);
 							pi.setFrom(Constant.me.getCid());
 							pi.setType(Constant.MSG_WIN);
-							pi.setTo(Constant.enamy.getCid());
+							pi.setTo(Constant.enamy.getRoomid());
 							pi.setMsg("你赢了，我认输！");
 							Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
 						}else{
@@ -656,7 +648,7 @@ public class GameWStage extends Stage implements MainStage{
 			pi.setApp(Constant.APP);
 			pi.setFrom(Constant.me.getCid());
 			pi.setType(rst>0?Constant.MSG_LOSE:(rst<0?Constant.MSG_WIN:Constant.MSG_PING));
-			pi.setTo(Constant.enamy.getCid());
+			pi.setTo(Constant.enamy.getRoomid());
 			pi.setMsg(rst>0?"你输了":(rst<0?"你赢了！":"平局"));
 			Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
 		}
@@ -784,7 +776,7 @@ public class GameWStage extends Stage implements MainStage{
 				pi.setApp(Constant.APP);
 				pi.setFrom(Constant.me.getCid());
 				pi.setType(Constant.MSG_ACTION);
-				pi.setTo(Constant.enamy.getCid());
+				pi.setTo(Constant.enamy.getRoomid());
 				pi.setMsg(JSONUtil.toJosn(cmd));
 				Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
 				System.out.println(src + "  " + dest);

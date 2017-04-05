@@ -64,6 +64,7 @@ public class GameScreen extends ScreenAdapter implements MessageCallBack {
 			@Override
 			public void run() {
 				if(Constant.MSG_JOIN.equals(pack.getType())){
+					System.out.println(JSONUtil.toJosn(pack));
 					String msg=pack.getMsg();
 					Map<String, Object> obj = JSONUtil.fromJson(msg);
 					List<Map<String, Object>> members = (List<Map<String, Object>>) obj.get("members");
@@ -73,6 +74,7 @@ public class GameScreen extends ScreenAdapter implements MessageCallBack {
 							Client c = new Client();
 							c.setCid(id.toString());
 							c.setCname(member.get("name").toString());
+							c.setRoomid((String) member.get("roomid"));
 							Constant.enamy = c;
 							break;
 						}
@@ -169,11 +171,15 @@ public class GameScreen extends ScreenAdapter implements MessageCallBack {
 	private boolean ready(Map<String, Object> params, PackageInfo info) {
 		String from = info.getFrom();
 		if(Constant.me.getCid().equals(from)) {
-			
+			Constant.mSender.showInfo("准备完毕");
 		}else {
-			
+			Constant.mSender.showInfo("对方准备完毕");
 		}
-		
+		if(null != params.get("fen")) {
+			String fen = (String) params.get("fen");
+			stage.gameReady();
+			stage.initPieces(fen);
+		}
 		return true;
 	}
 	

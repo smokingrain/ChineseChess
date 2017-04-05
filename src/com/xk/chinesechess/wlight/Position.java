@@ -1020,29 +1020,29 @@ public class Position {
 //	public static final short[] bookValue = new short[MAX_BOOK_SIZE];
 
 	public static void init() {
-		InputStream in = Gdx.files.internal("data/book/BOOK.DAT").read();
-		if (in != null) {
-			try {
-				List<Integer[]> books = new ArrayList<Integer[]>();
-				while (bookSize < MAX_BOOK_SIZE) {
-					Integer[] values = new Integer[3];
-					values[0] = Util.readInt(in) >>> 1;
-					values[1] = Util.readShort(in);
-					values[2] = Util.readShort(in);
-					books.add(values);
-					bookSize++;
-				}
-				BOOK_DAT = books.toArray(new Integer[][] {});
-			} catch (Exception e) {
-				// Exit "while" when IOException occurs
-				e.printStackTrace();
-			}
-			try {
-				in.close();
-			} catch (Exception e) {
-				// Ignored
-			}
-		}
+//		InputStream in = Gdx.files.internal("data/book/BOOK.DAT").read();
+//		if (in != null) {
+//			try {
+//				List<Integer[]> books = new ArrayList<Integer[]>();
+//				while (bookSize < MAX_BOOK_SIZE) {
+//					Integer[] values = new Integer[3];
+//					values[0] = Util.readInt(in) >>> 1;
+//					values[1] = Util.readShort(in);
+//					values[2] = Util.readShort(in);
+//					books.add(values);
+//					bookSize++;
+//				}
+//				BOOK_DAT = books.toArray(new Integer[][] {});
+//			} catch (Exception e) {
+//				// Exit "while" when IOException occurs
+//				e.printStackTrace();
+//			}
+//			try {
+//				in.close();
+//			} catch (Exception e) {
+//				// Ignored
+//			}
+//		}
 	}
 
 	public int bookMove() {
