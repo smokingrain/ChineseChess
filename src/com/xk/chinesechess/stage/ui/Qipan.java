@@ -43,31 +43,15 @@ public class Qipan extends Image {
 				if(stage.getLastSelected()!=null&&x>=0&&x<=9&&y>=0&&y<=9){
 					int srcX=(int) stage.getLastSelected().getCoordinateX();
 					int srcY=(int) stage.getLastSelected().getCoordinateY();
-					if (stage.moveQizi(stage.getLastSelected(), x, y)) {
-						stage.changeLocation(stage.getLastSelected(), x, y);
-						stage.setMyTurn(false);
-						if(!stage.isLocal()){
-							int src = srcX * 10 + srcY;
-							int dest = x * 10 + y;
-							Map<String, Object> cmd = new HashMap<String, Object>();
-							cmd.put("cmd", Constant.MSG_XIAQI);
-							cmd.put("src", src);
-							cmd.put("dest", dest);
-							PackageInfo pi=new PackageInfo();
-							pi.setApp(Constant.APP);
-							pi.setFrom(Constant.me.getCid());
-							pi.setType(Constant.MSG_ACTION);
-							pi.setTo(Constant.enamy.getRoomid());
-							pi.setMsg(JSONUtil.toJosn(cmd));
-							Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
-							System.out.println(src + "  " + dest);
-						}else{
-//							stage.computerMove();
-						}
-//						stage.decideFailer();
-					}else{
-//						Constant.sounds.get("illegal").play();
-					}
+					int src = srcX * 10 + srcY;
+					int dest = x * 10 + y;
+					Map<String, Object> cmd = new HashMap<String, Object>();
+					cmd.put("cmd", Constant.MSG_XIAQI);
+					cmd.put("src", src);
+					cmd.put("dest", dest);
+					PackageInfo pi=new PackageInfo(Constant.enamy.getRoomid(), JSONUtil.toJosn(cmd), Constant.me.getCid(), Constant.MSG_ACTION, Constant.APP, Constant.msgVersion + 1);
+					Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
+					System.out.println(src + "  " + dest);
 				}else{
 //					Constant.sounds.get("illegal").play();
 				}

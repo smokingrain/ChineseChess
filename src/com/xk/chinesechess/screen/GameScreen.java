@@ -63,6 +63,10 @@ public class GameScreen extends ScreenAdapter implements MessageCallBack {
 			
 			@Override
 			public void run() {
+				int version = pack.getVersion();
+				if(version > Constant.msgVersion) {
+					Constant.msgVersion = version;
+				}
 				if(Constant.MSG_JOIN.equals(pack.getType())){
 					System.out.println(JSONUtil.toJosn(pack));
 					String msg=pack.getMsg();
@@ -74,7 +78,7 @@ public class GameScreen extends ScreenAdapter implements MessageCallBack {
 							Client c = new Client();
 							c.setCid(id.toString());
 							c.setCname(member.get("name").toString());
-							c.setRoomid((String) member.get("roomid"));
+							c.setRoomid((String) member.get("room"));
 							Constant.enamy = c;
 							break;
 						}

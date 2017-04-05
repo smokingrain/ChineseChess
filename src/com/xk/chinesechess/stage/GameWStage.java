@@ -327,12 +327,7 @@ public class GameWStage extends Stage implements MainStage{
 //					return super.touchDown(event, x, y, pointer, button);
 //				}
 				if(!isLocal){
-					PackageInfo pi=new PackageInfo();
-					pi.setApp(Constant.APP);
-					pi.setFrom(Constant.me.getCid());
-					pi.setType(Constant.MSG_REGRET);
-					pi.setTo(Constant.enamy.getRoomid());
-					pi.setMsg("对方悔棋");
+					PackageInfo pi=new PackageInfo(Constant.enamy.getRoomid(), "对方悔棋", Constant.me.getCid(), Constant.MSG_REGRET, Constant.APP, Constant.msgVersion + 1);
 					Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
 				}
 //				undo();
@@ -348,14 +343,9 @@ public class GameWStage extends Stage implements MainStage{
 				System.out.println("ready!!!");
 				if(!isrunning){
 					if(null!=Constant.enamy){
-						PackageInfo info=new PackageInfo();
-						info.setApp(Constant.APP);
-						info.setFrom(Constant.me.getCid());
-						info.setTo(Constant.enamy.getRoomid());
-						info.setType(Constant.MSG_ACTION);
 						Map<String, Object> cmd = new HashMap<String, Object>();
 						cmd.put("cmd", Constant.MSG_READY);
-						info.setMsg(JSONUtil.toJosn(cmd));
+						PackageInfo info=new PackageInfo(Constant.enamy.getRoomid(), JSONUtil.toJosn(cmd), Constant.me.getCid(), Constant.MSG_ACTION, Constant.APP, Constant.msgVersion + 1);
 						Constant.mSender.writeMessage(JSONUtil.toJosn(info));
 					}else{
 						Constant.mSender.showInfo("请等待玩家加入...");
@@ -376,12 +366,7 @@ public class GameWStage extends Stage implements MainStage{
 					Constant.mSender.showInfo("认输了...");
 					if(!isLocal){
 						if(null!=Constant.enamy){
-							PackageInfo pi=new PackageInfo();
-							pi.setApp(Constant.APP);
-							pi.setFrom(Constant.me.getCid());
-							pi.setType(Constant.MSG_WIN);
-							pi.setTo(Constant.enamy.getRoomid());
-							pi.setMsg("你赢了，我认输！");
+							PackageInfo pi=new PackageInfo(Constant.enamy.getRoomid(), "你赢了，我认输！", Constant.me.getCid(), Constant.MSG_WIN, Constant.APP, button);
 							Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
 						}else{
 							Constant.mSender.showInfo("请等待玩家加入...");
@@ -500,7 +485,7 @@ public class GameWStage extends Stage implements MainStage{
 		Qizi qizi=pieceIndex[src];
 		if (moveQizi(qizi, x2, y2)) {
 			changeLocation(qizi, x2, y2);
-			setMyTurn(true);
+			setMyTurn(!isMyTurn());
 //			decideFailer();
 			return true;
 		}
@@ -641,19 +626,17 @@ public class GameWStage extends Stage implements MainStage{
 //		}
 //		
 //	}
-	
-	private void sendResult(int rst){
-		if(!isLocal()){
-			PackageInfo pi=new PackageInfo();
-			pi.setApp(Constant.APP);
-			pi.setFrom(Constant.me.getCid());
-			pi.setType(rst>0?Constant.MSG_LOSE:(rst<0?Constant.MSG_WIN:Constant.MSG_PING));
-			pi.setTo(Constant.enamy.getRoomid());
-			pi.setMsg(rst>0?"你输了":(rst<0?"你赢了！":"平局"));
-			Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
-		}
-	}
-	
+//	private void sendResult(int rst){
+//		if(!isLocal()){
+//			PackageInfo pi=new PackageInfo(null, null, null, null, null, rst);
+//			pi.setApp(Constant.APP);
+//			pi.setFrom(Constant.me.getCid());
+//			pi.setType(rst>0?Constant.MSG_LOSE:(rst<0?Constant.MSG_WIN:Constant.MSG_PING));
+//			pi.setTo(Constant.enamy.getRoomid());
+//			pi.setMsg(rst>0?"你输了":(rst<0?"你赢了！":"平局"));
+//			Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
+//		}
+//	}
 //	public void computerMove(){
 //		Thread t=new Thread(new Runnable() {
 //			
@@ -772,12 +755,7 @@ public class GameWStage extends Stage implements MainStage{
 				cmd.put("cmd", Constant.MSG_XIAQI);
 				cmd.put("src", src);
 				cmd.put("dest", dest);
-				PackageInfo pi=new PackageInfo();
-				pi.setApp(Constant.APP);
-				pi.setFrom(Constant.me.getCid());
-				pi.setType(Constant.MSG_ACTION);
-				pi.setTo(Constant.enamy.getRoomid());
-				pi.setMsg(JSONUtil.toJosn(cmd));
+				PackageInfo pi=new PackageInfo(Constant.enamy.getRoomid(), JSONUtil.toJosn(cmd), Constant.me.getCid(), Constant.MSG_ACTION, Constant.APP, Constant.msgVersion + 1);
 				Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
 				System.out.println(src + "  " + dest);
 			}

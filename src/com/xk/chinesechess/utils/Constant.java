@@ -72,6 +72,7 @@ public class Constant {
 	public static final int GAME_RUNNING=2;//游戏中
 	public static final int GAME_OVER=-1;//游戏结束
 	public static int GameStatus=GAME_START;
+	public static int msgVersion = 0;
 	
 	public static Map<String,Texture>texturePools=new HashMap<String,Texture>();
 //	public static Map<String,Sound> sounds=new HashMap<String,Sound>();

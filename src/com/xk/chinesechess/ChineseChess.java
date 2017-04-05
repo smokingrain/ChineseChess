@@ -63,12 +63,7 @@ public class ChineseChess extends Game {
 			Constant.listener.unregistListener(game);
 		}
 		if(!StringUtil.isBlank(roomid)){
-			PackageInfo info=new PackageInfo();
-			info.setApp(Constant.APP);
-			info.setType(Constant.MSG_EXIT_ROOM);
-			info.setTo(roomid);
-			info.setFrom(Constant.me.getCid());
-			info.setMsg(JSONUtil.toJosn(Constant.me));
+			PackageInfo info=new PackageInfo(roomid, JSONUtil.toJosn(Constant.me), Constant.me.getCid(), Constant.MSG_EXIT_ROOM, Constant.APP, 0);
 			Constant.mSender.writeMessage(JSONUtil.toJosn(info));
 		}
 		
