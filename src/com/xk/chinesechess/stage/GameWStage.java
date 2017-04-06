@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.xk.chinesechess.ChineseChess;
 import com.xk.chinesechess.message.PackageInfo;
 import com.xk.chinesechess.message.Xiaqi;
 import com.xk.chinesechess.stage.ui.Qipan;
@@ -327,7 +328,7 @@ public class GameWStage extends Stage implements MainStage{
 //					return super.touchDown(event, x, y, pointer, button);
 //				}
 				if(!isLocal){
-					PackageInfo pi=new PackageInfo(Constant.enamy.getRoomid(), "对方悔棋", Constant.me.getCid(), Constant.MSG_REGRET, Constant.APP, Constant.msgVersion + 1);
+					PackageInfo pi=new PackageInfo(ChineseChess.getInstance(null).roomid, "对方悔棋", Constant.me.getCid(), Constant.MSG_REGRET, Constant.APP, Constant.msgVersion + 1);
 					Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
 				}
 //				undo();
@@ -342,10 +343,10 @@ public class GameWStage extends Stage implements MainStage{
 				p1Ready=true;
 				System.out.println("ready!!!");
 				if(!isrunning){
-					if(null!=Constant.enamy){
+					if(null!=Constant.enamy || isLocal){
 						Map<String, Object> cmd = new HashMap<String, Object>();
 						cmd.put("cmd", Constant.MSG_READY);
-						PackageInfo info=new PackageInfo(Constant.enamy.getRoomid(), JSONUtil.toJosn(cmd), Constant.me.getCid(), Constant.MSG_ACTION, Constant.APP, Constant.msgVersion + 1);
+						PackageInfo info=new PackageInfo(ChineseChess.getInstance(null).roomid, JSONUtil.toJosn(cmd), Constant.me.getCid(), Constant.MSG_ACTION, Constant.APP, Constant.msgVersion + 1);
 						Constant.mSender.writeMessage(JSONUtil.toJosn(info));
 					}else{
 						Constant.mSender.showInfo("请等待玩家加入...");
@@ -366,7 +367,7 @@ public class GameWStage extends Stage implements MainStage{
 					Constant.mSender.showInfo("认输了...");
 					if(!isLocal){
 						if(null!=Constant.enamy){
-							PackageInfo pi=new PackageInfo(Constant.enamy.getRoomid(), "你赢了，我认输！", Constant.me.getCid(), Constant.MSG_WIN, Constant.APP, button);
+							PackageInfo pi=new PackageInfo(ChineseChess.getInstance(null).roomid, "你赢了，我认输！", Constant.me.getCid(), Constant.MSG_WIN, Constant.APP, button);
 							Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
 						}else{
 							Constant.mSender.showInfo("请等待玩家加入...");
@@ -575,11 +576,10 @@ public class GameWStage extends Stage implements MainStage{
 		Qizi qz = pieceIndex[src];
 		int dstX = dst / 10;
 		int dstY = dst % 10;
-		if (qz == null)
-			return;
 		if (moveQizi(qz, dstX, dstY)) {
 			System.out.println("成功下棋！");
 			changeLocation(qz, dstX, dstY);
+			setMyTurn(!isMyTurn());
 			selectQz(qz);
 			return;
 		}
@@ -755,7 +755,7 @@ public class GameWStage extends Stage implements MainStage{
 				cmd.put("cmd", Constant.MSG_XIAQI);
 				cmd.put("src", src);
 				cmd.put("dest", dest);
-				PackageInfo pi=new PackageInfo(Constant.enamy.getRoomid(), JSONUtil.toJosn(cmd), Constant.me.getCid(), Constant.MSG_ACTION, Constant.APP, Constant.msgVersion + 1);
+				PackageInfo pi=new PackageInfo(ChineseChess.getInstance(null).roomid, JSONUtil.toJosn(cmd), Constant.me.getCid(), Constant.MSG_ACTION, Constant.APP, Constant.msgVersion + 1);
 				Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
 				System.out.println(src + "  " + dest);
 			}

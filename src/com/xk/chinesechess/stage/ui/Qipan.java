@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.xk.chinesechess.ChineseChess;
 import com.xk.chinesechess.message.PackageInfo;
 import com.xk.chinesechess.message.Xiaqi;
 import com.xk.chinesechess.stage.MainStage;
@@ -49,7 +50,7 @@ public class Qipan extends Image {
 					cmd.put("cmd", Constant.MSG_XIAQI);
 					cmd.put("src", src);
 					cmd.put("dest", dest);
-					PackageInfo pi=new PackageInfo(Constant.enamy.getRoomid(), JSONUtil.toJosn(cmd), Constant.me.getCid(), Constant.MSG_ACTION, Constant.APP, Constant.msgVersion + 1);
+					PackageInfo pi=new PackageInfo(ChineseChess.getInstance(null).roomid, JSONUtil.toJosn(cmd), Constant.me.getCid(), Constant.MSG_ACTION, Constant.APP, Constant.msgVersion + 1);
 					Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
 					System.out.println(src + "  " + dest);
 				}else{
