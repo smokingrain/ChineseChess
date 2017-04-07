@@ -37,7 +37,6 @@ public class GameWStage extends Stage implements MainStage{
 	//AI
 //	private Map<Character,String> nameMap=new HashMap<Character,String>();
 	private PieceArray pieceArr;
-	private boolean computerIsThingking=false;
 //	private Position pos = new Position();
 //	private Search search = new Search(pos, 12);
 	private Qizi[] pieceIndex;
@@ -67,7 +66,7 @@ public class GameWStage extends Stage implements MainStage{
 	
 	//VAR
 	private boolean isLocal=false;//单机
-	private boolean isMyPlace=false;//主场
+	private int isMyPlace = 1;//主场
 	private boolean myTurn=false;
 	private boolean p1Ready=false;
 	private boolean p2Ready=false;
@@ -78,31 +77,31 @@ public class GameWStage extends Stage implements MainStage{
 	float totalTime=0;
 	
 
-	public GameWStage(float width,float height,boolean size,boolean isMyPlace,boolean isLocal){
-		super(width,height,size);
-		this.isMyPlace=isMyPlace;//是否主场
-		this.isLocal=isLocal;//是否单机
-		p2Ready=isLocal;
+	public GameWStage(float width, float height, boolean size, int isMyPlace,
+			boolean isLocal) {
+		super(width, height, size);
+		this.isMyPlace = isMyPlace;// 是否主场
+		this.isLocal = isLocal;// 是否单机
+		p2Ready = isLocal;
 		initMaps();
 		createButtons();
 		createMyInfo();
 		initListner();
 		loadBook();
 	}
-	
-	
-	public void rebuild(boolean isMyPlace,boolean isLocal){
-		this.isMyPlace=isMyPlace;//是否主场
-		this.isLocal=isLocal;//是否单机
+
+	public void rebuild(int isMyPlace, boolean isLocal) {
+		this.isMyPlace = isMyPlace;// 是否主场
+		this.isLocal = isLocal;// 是否单机
 	}
 	
-	public void gameReady(){
-		hisTime=0;
-		myTime=0;
-		isrunning=true;
-		p1Ready=true;
-		p2Ready=true;
-		myTurn=isMyPlace;
+	public void gameReady() {
+		hisTime = 0;
+		myTime = 0;
+		isrunning = true;
+		p1Ready = true;
+		p2Ready = true;
+		myTurn = 1 == isMyPlace;
 		start();
 	}
 	
@@ -145,7 +144,7 @@ public class GameWStage extends Stage implements MainStage{
 				char c=s.charAt(i);
 				Texture temp=Constant.texturePools.get(c+""+((c+"").equals((c+"").toLowerCase())?2:1));
 				TextureRegion tempr=new TextureRegion(temp,0,0,54,54);
-				tmpQizi =new Qizi(tempr,(c+"").equals((c+"").toLowerCase())?1:0); 
+				tmpQizi =new Qizi(tempr,(c+"").equals((c+"").toLowerCase())?2:1); 
 				tmpQizi.setPosition(72*col+45, 72*row+340);
 				tmpQizi.addListener(listener);
 				pieceArr.add(tmpQizi);
@@ -324,13 +323,11 @@ public class GameWStage extends Stage implements MainStage{
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
-//				if(!isMyTurn()||!isrunning){
-//					return super.touchDown(event, x, y, pointer, button);
-//				}
-				if(!isLocal){
-					PackageInfo pi=new PackageInfo(ChineseChess.getInstance(null).roomid, "对方悔棋", Constant.me.getCid(), Constant.MSG_REGRET, Constant.APP, Constant.msgVersion + 1);
-					Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
+				if(!isMyTurn()||!isrunning){
+					return super.touchDown(event, x, y, pointer, button);
 				}
+				PackageInfo pi=new PackageInfo(ChineseChess.getInstance(null).roomid, "对方悔棋", Constant.me.getCid(), Constant.MSG_REGRET, Constant.APP, Constant.msgVersion + 1);
+				Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
 //				undo();
 //				undo();
 				return super.touchDown(event, x, y, pointer, button);
@@ -362,17 +359,14 @@ public class GameWStage extends Stage implements MainStage{
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
-				if(isrunning&&!computerIsThingking){
-					gameEnd(false);
-					Constant.mSender.showInfo("认输了...");
-					if(!isLocal){
-						if(null!=Constant.enamy){
-							PackageInfo pi=new PackageInfo(ChineseChess.getInstance(null).roomid, "你赢了，我认输！", Constant.me.getCid(), Constant.MSG_WIN, Constant.APP, button);
-							Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
-						}else{
-							Constant.mSender.showInfo("请等待玩家加入...");
-						}
-						
+				if(isrunning){
+					if(null!=Constant.enamy){
+						Map<String, Object> cmd = new HashMap<String, Object>();
+						cmd.put("cmd", Constant.MSG_GIVEIN);
+						PackageInfo pi=new PackageInfo(ChineseChess.getInstance(null).roomid, JSONUtil.toJosn(cmd), Constant.me.getCid(), Constant.MSG_ACTION, Constant.APP, button);
+						Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
+					}else{
+						Constant.mSender.showInfo("请等待玩家加入...");
 					}
 				}
 				return super.touchDown(event, x, y, pointer, button);
@@ -414,7 +408,7 @@ public class GameWStage extends Stage implements MainStage{
 		return isLocal;
 	}
 
-	public boolean isMyPlace() {
+	public int isMyPlace() {
 		return isMyPlace;
 	}
 	
@@ -457,10 +451,10 @@ public class GameWStage extends Stage implements MainStage{
 		
 	}
 	
-	public void enamyRunAway(){
+	public void enamyRunAway() {
 		gameEnd(true);
-		Constant.enamy=null;
-		isMyPlace=true;
+		Constant.enamy = null;
+		isMyPlace = 1;
 		Constant.mSender.showInfo("对面的吓跑了！");
 	}
 	
@@ -482,8 +476,8 @@ public class GameWStage extends Stage implements MainStage{
 	 * @return
 	 */
 	public boolean xiaqi(int x1,int y1,int x2,int y2){
-		int src=x1 * 10 + y1;
-		Qizi qizi=pieceIndex[src];
+		int src = x1 * 10 + y1;
+		Qizi qizi = pieceIndex[src];
 		if (moveQizi(qizi, x2, y2)) {
 			changeLocation(qizi, x2, y2);
 			setMyTurn(!isMyTurn());
@@ -737,27 +731,29 @@ public class GameWStage extends Stage implements MainStage{
 		@Override
 		public boolean touchDown(InputEvent event, float x, float y,
 				int pointer, int button) {
-			if(computerIsThingking||!isrunning){
+			if(!isMyTurn()||!isrunning){
 				return true;
 			}
 			box.setVisible(false);
 			Qizi tmpQizi=(Qizi) event.getTarget();
-			if(null==getLastSelected()){
-				selectQz(tmpQizi);
-			}else{
+			if(null != getLastSelected() && isMyPlace == getLastSelected().getValue() && isMyPlace != tmpQizi.getValue()){
 				int x1 = (int) tmpQizi.getCoordinateX();
 				int y1 = (int) tmpQizi.getCoordinateY();
 				int srcX=(int) getLastSelected().getCoordinateX();
 				int srcY=(int) getLastSelected().getCoordinateY();
-				int src = srcX * 10 + srcY;
-				int dest = x1 * 10 + y1;
+				int sqSrc=Position.COORD_XY(srcX + Position.FILE_LEFT, srcY + Position.RANK_TOP);
+				int sqDst = Position.COORD_XY(x1 + Position.FILE_LEFT, y1 + Position.RANK_TOP);
+//				int src = srcX * 10 + srcY;
+//				int dest = x1 * 10 + y1;
 				Map<String, Object> cmd = new HashMap<String, Object>();
 				cmd.put("cmd", Constant.MSG_XIAQI);
-				cmd.put("src", src);
-				cmd.put("dest", dest);
+				cmd.put("src", sqSrc);
+				cmd.put("dest", sqDst);
 				PackageInfo pi=new PackageInfo(ChineseChess.getInstance(null).roomid, JSONUtil.toJosn(cmd), Constant.me.getCid(), Constant.MSG_ACTION, Constant.APP, Constant.msgVersion + 1);
 				Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
-				System.out.println(src + "  " + dest);
+				System.out.println(sqSrc + "  " + sqDst);
+			} else {
+				selectQz(tmpQizi);
 			}
 			return super.touchDown(event, x, y, pointer, button);
 		}

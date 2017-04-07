@@ -7,6 +7,7 @@ public interface MessageSender {
 	public void showInfo(String info);
 	public boolean isAndroid();
 	public String getMyIp();
+	public void close();
 	public void writeMessage(String info);
 	public void openWindow(String title,String message,WindowCallback callback);
 	public void openMask(String message);

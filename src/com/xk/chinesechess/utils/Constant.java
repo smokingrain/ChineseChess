@@ -46,11 +46,10 @@ public class Constant {
 	public static final String MSG_JOIN="join";
 //	public static final String MSG_JOIN_RESULT="joinResult";
 	public static final String MSG_XIAQI="move";
-	public static final String MSG_WIN="win";
+	public static final String MSG_GIVEIN="givein";
 	public static final String MSG_PING="ping";
 	public static final String MSG_REGRET="regret";
 	public static final String MSG_READY="ready";
-	public static final String MSG_LOSE="lose";
 	public static final String MSG_EXIT="exit";
 	public static final String MSG_DISCONNECT="disconnect";
 	

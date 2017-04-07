@@ -14,7 +14,7 @@ import com.xk.chinesechess.utils.StringUtil;
 public class ChineseChess extends Game {
 	private GameScreen game;
 	private static ChineseChess instance;
-	public boolean isMyPlace;
+	public int isMyPlace;
 	public boolean isLocal;
 	public String roomid;
 	
@@ -65,6 +65,7 @@ public class ChineseChess extends Game {
 		if(!StringUtil.isBlank(roomid)){
 			PackageInfo info=new PackageInfo(roomid, JSONUtil.toJosn(Constant.me), Constant.me.getCid(), Constant.MSG_EXIT_ROOM, Constant.APP, 0);
 			Constant.mSender.writeMessage(JSONUtil.toJosn(info));
+			Constant.mSender.close();
 		}
 		
 		Constant.releaseResource();

@@ -21,12 +21,12 @@ import com.xk.chinesechess.utils.StringUtil;
 public class GameScreen extends ScreenAdapter implements MessageCallBack {
     private GameWStage stage = null;
 
-    public GameScreen(boolean ismyplace,boolean islocal) {
+    public GameScreen(int ismyplace,boolean islocal) {
         //true 为自适应分辨率
         stage = new GameWStage(720,1280, false,ismyplace,islocal);
     }
 
-    public void rebuild(boolean isMyPlace,boolean isLocal){
+    public void rebuild(int isMyPlace,boolean isLocal){
     	stage.rebuild(isMyPlace, isLocal);
     }
     
@@ -102,13 +102,6 @@ public class GameScreen extends ScreenAdapter implements MessageCallBack {
 						result = ready(cmdInfo, pack);
 					}
 					
-					
-					
-					Xiaqi xiaqi=JSONUtil.toBean(pack.getMsg(), Xiaqi.class);
-					stage.xiaqi(xiaqi.x, xiaqi.y,xiaqi.destX,xiaqi.destY);
-				}else if(Constant.MSG_LOSE.equals(pack.getType())){
-					stage.gameEnd(false);
-					Constant.mSender.showInfo("你输了！");
 				}else if(Constant.MSG_PING.equals(pack.getType())){
 					stage.gameEnd(false);
 					Constant.mSender.showInfo(pack.getMsg());
@@ -116,11 +109,6 @@ public class GameScreen extends ScreenAdapter implements MessageCallBack {
 //					stage.undo();
 //					stage.undo();
 //					Constant.mSender.showInfo(pack.getMsg());
-				}else if(Constant.MSG_WIN.equals(pack.getType())){
-					stage.gameEnd(true);
-					Constant.mSender.showInfo(pack.getMsg());
-				}else if(Constant.MSG_READY.equals(pack.getType())){
-					stage.setP2Ready();
 				}else if(Constant.MSG_EXIT_ROOM.equals(pack.getType())){
 					stage.enamyRunAway();
 				}else if(Constant.MSG_DISCONNECT.equals(pack.getType())){
@@ -151,13 +139,25 @@ public class GameScreen extends ScreenAdapter implements MessageCallBack {
 		String peace = (String) cmdInfo.get("peace");
 		String mat = (String) cmdInfo.get("mat");
 		if("mat".equals(mat)) {//将死
-			
+			if(info.getFrom().equals(Constant.me.getCid())) {
+				stage.gameEnd(true);
+				Constant.mSender.showInfo("你赢了！");
+			}else {
+				stage.gameEnd(false);
+				Constant.mSender.showInfo("你输了！");
+			}
 		}else if("peace".equals(peace)) {//平局
-			
+			stage.gameEnd(false);
+			Constant.mSender.showInfo("和棋！");
 		}else if("rep".equals(rep)) {//赖皮棋
-			
+			if(info.getFrom().equals(Constant.me.getCid())) {
+				stage.gameEnd(false);
+			}else {
+				stage.gameEnd(true);
+			}
+			Constant.mSender.showInfo("三将不理！");
 		}else if("chk".equals(chk)) {//将军
-			
+			Constant.mSender.showInfo("将军！");
 		}
 		return true;
 	}
@@ -190,7 +190,12 @@ public class GameScreen extends ScreenAdapter implements MessageCallBack {
 	 * @return
 	 */
 	private boolean undo(Map<String, Object> params, PackageInfo info) {
-		
+		String from = info.getFrom();
+		if(Constant.me.getCid().equals(from)) {
+			Constant.mSender.showInfo("准备完毕");
+		}else {
+			Constant.mSender.showInfo("对方准备完毕");
+		}
 		
 		return false;
 	}
@@ -202,7 +207,14 @@ public class GameScreen extends ScreenAdapter implements MessageCallBack {
 	 * @return
 	 */
 	private boolean givein(Map<String, Object> params, PackageInfo info) {
-		
+		String from = info.getFrom();
+		if(Constant.me.getCid().equals(from)) {
+			stage.gameEnd(false);
+			Constant.mSender.showInfo("认输了。。。");
+		}else {
+			stage.gameEnd(true);
+			Constant.mSender.showInfo("对方认输了。。。");
+		}
 		return false;
 	}
 	

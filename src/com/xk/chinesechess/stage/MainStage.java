@@ -9,6 +9,7 @@ public interface MainStage {
 	public boolean moveQizi(Qizi q,int x,int y);
 	public void changeLocation(Qizi q,int x,int y);
 	public void setMyTurn(boolean turn);
+	public int isMyPlace();
 	public boolean isLocal();
 //	public void computerMove();
 //	public void decideFailer();
