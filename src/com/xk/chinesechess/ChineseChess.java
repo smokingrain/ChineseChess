@@ -59,6 +59,7 @@ public class ChineseChess extends Game {
 	@Override
 	public void dispose() {
 		getScreen().dispose();
+		Constant.msgVersion = 0;
 		if(null!=Constant.listener){
 			Constant.listener.unregistListener(game);
 		}

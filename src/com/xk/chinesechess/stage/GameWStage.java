@@ -363,7 +363,7 @@ public class GameWStage extends Stage implements MainStage{
 					if(null!=Constant.enamy){
 						Map<String, Object> cmd = new HashMap<String, Object>();
 						cmd.put("cmd", Constant.MSG_GIVEIN);
-						PackageInfo pi=new PackageInfo(ChineseChess.getInstance(null).roomid, JSONUtil.toJosn(cmd), Constant.me.getCid(), Constant.MSG_ACTION, Constant.APP, button);
+						PackageInfo pi=new PackageInfo(ChineseChess.getInstance(null).roomid, JSONUtil.toJosn(cmd), Constant.me.getCid(), Constant.MSG_ACTION, Constant.APP, Constant.msgVersion + 1);
 						Constant.mSender.writeMessage(JSONUtil.toJosn(pi));
 					}else{
 						Constant.mSender.showInfo("请等待玩家加入...");

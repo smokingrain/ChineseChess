@@ -45,8 +45,8 @@ public class Qipan extends Image {
 				}
 				int x = ((int) screenX + 45) / 72 - 1;
 				int y = (((int) screenY + 45) / 72 - 1);
-				if (stage.getLastSelected() != null && stage.isMyPlace() == stage.getLastSelected().getValue() && x >= 0 && x <= 9
-						&& y >= 0 && y <= 9) {
+				if (stage.getLastSelected() != null && stage.isMyPlace() == stage.getLastSelected().getValue() && x >= 0 && x < 9
+						&& y >= 0 && y < 9) {
 					int srcX = (int) stage.getLastSelected().getCoordinateX();
 					int srcY = (int) stage.getLastSelected().getCoordinateY();
 					int sqSrc = Position.COORD_XY(srcX + Position.FILE_LEFT,
