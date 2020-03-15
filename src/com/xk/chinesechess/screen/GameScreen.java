@@ -128,8 +128,8 @@ public class GameScreen extends ScreenAdapter implements MessageCallBack {
 	 * @return
 	 */
 	private boolean move(Map<String, Object> cmdInfo, PackageInfo info) {
-		int src = (int) cmdInfo.get("src");
-		int dest = (int) cmdInfo.get("dest");
+		int src = (Integer) cmdInfo.get("src");
+		int dest = (Integer) cmdInfo.get("dest");
 		stage.moveQizi(src, dest);
 		
 		String fen = (String) cmdInfo.get("fen");
